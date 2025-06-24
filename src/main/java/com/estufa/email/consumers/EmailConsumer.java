@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import com.estufa.email.dtos.EmailDto;
+import com.estufa.email.dtos.EstufaEmailDto;
 import com.estufa.email.models.EmailModel;
 import com.estufa.email.services.EmailService;
 
@@ -17,9 +18,21 @@ public class EmailConsumer {
     private EmailService emailService;
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
-    public void listen(@Payload EmailDto emailDto) {
-        var emailModel = new EmailModel();
-        BeanUtils.copyProperties(emailDto, emailModel);
+    public void listen(@Payload EstufaEmailDto emailDto) {
+        EmailModel emailModel = new EmailModel();
+
+        emailModel.setOwnerRef("Sistema Estufa");
+        emailModel.setEmailFrom("patrick.dias@estudante.ifms.edu.br");
+        emailModel.setEmailTo(emailDto.emailTo());
+        emailModel.setSubject("Alerta: Condições Críticas na Estufa");
+
+        String corpo = String.format(
+                "Monitoramento:\nTemperatura: %.2f°C\nSensação Térmica: %.2f°C\nUmidade: %.2f%%",
+                emailDto.temperaturaEstufa(),
+                emailDto.sensacaoTermicaEstufa(),
+                emailDto.umidadeEstufa());
+        emailModel.setBody(corpo);
+
         emailService.sendEmail(emailModel);
         System.out.println("Email status: " + emailModel.getStatusEmail().toString());
     }
