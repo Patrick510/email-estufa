@@ -28,7 +28,7 @@ public class EmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(emailModel.getEmailFrom());
             message.setTo(emailModel.getEmailTo());
-            message.setSubject(emailModel.getSubject());
+            message.setSubject("Alerta: Condições Críticas na Estufa");
             message.setText(emailModel.getBody());
             emailSender.send(message);
 
