@@ -54,7 +54,7 @@ emailModel.setEmailFrom("patrick.dias@estudante.ifms.edu.br");
 
 ```bash
 # 1. Clone o projeto
-git clone https://github.com/seuusuario/email-estufa.git
+git clone https://github.com/Patrick510/email-estufa.git
 cd email-estufa
 
 # 2. Configure o application.properties:
